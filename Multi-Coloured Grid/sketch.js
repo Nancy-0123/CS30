@@ -1,5 +1,5 @@
-// Project Title
-// Your Name
+// Multi-Coloured Grid
+// Nancy Yang
 // Date
 //
 // Extra for Experts:
@@ -8,21 +8,38 @@
 let squareSize = 20;
 
 function setup() {
+  document.addEventListener("contextmenu", event => event.preventDefault());
   createCanvas(windowWidth, windowHeight);
   noStroke();
+  noLoop();
+}
+
+function mousePressed() {
+  if (mouseButton === "left") {
+    squareSize = squareSize - 5;
+  }
+  else if (mouseButton === "right") {
+    squareSize = squareSize + 5;
+  }
 }
 
 function draw() {
-  nestedLoops();
+  drawGrid();
 }
 
-function nestedLoops() {
+function keyPressed(){
+  drawGrid();
+}
+
+function drawGrid() {
   // using a loop within a loop, generate a grid arrangement
   // for some squares
-  for (let x = 0; x < width; x += squareSize) { 
-    for (let y = 0; y < height; y += squareSize) {
+  for (let x = 0; x + squareSize < width; x += squareSize) { 
+    for (let y = 0; y + squareSize < height; y += squareSize) {
       stroke(0); 
       square(x, y, squareSize);
+      fill(random(255), random(255), random(255));
     }
   }
 }
+
