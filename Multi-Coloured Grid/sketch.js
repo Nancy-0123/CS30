@@ -16,10 +16,16 @@ function setup() {
 
 function mousePressed() {
   if (mouseButton === "left") {
+    if (squareSize > 5) {
     squareSize = squareSize - 5;
+    clear();
+    drawGrid();
+    }
   }
   else if (mouseButton === "right") {
     squareSize = squareSize + 5;
+    clear();
+    drawGrid();
   }
 }
 
@@ -38,7 +44,7 @@ function drawGrid() {
     for (let y = 0; y + squareSize < height; y += squareSize) {
       stroke(0); 
       square(x, y, squareSize);
-      fill(random(255), random(255), random(255));
+      fill(random(255), random(255), 255);
     }
   }
 }
