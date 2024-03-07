@@ -1,20 +1,19 @@
 // Multi-Coloured Grid
 // Nancy Yang
-// Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// March 8, 2024
+// Using loops to generate a grid arrangement with random colours
 
-let squareSize = 20;
+let squareSize = 20; 
 
-function setup() {
+function setup() {  
   document.addEventListener("contextmenu", event => event.preventDefault());
   createCanvas(windowWidth, windowHeight);
   noStroke();
   noLoop();
 }
 
-function mousePressed() {
+function mousePressed() {    // Change the square size when mouse is clicked 
+  //(left click to make them smaller, right click to make them bigger)
   if (mouseButton === "left") {
     if (squareSize > 5) {
     squareSize = squareSize - 5;
@@ -29,22 +28,23 @@ function mousePressed() {
   }
 }
 
+// Draw the initial grid
 function draw() {
   drawGrid();
 }
 
+// Refresh the sketch everytime a keyboard is clicked
 function keyPressed(){
   drawGrid();
 }
 
 function drawGrid() {
-  // using a loop within a loop, generate a grid arrangement
-  // for some squares
+  // Using a loop within a loop, generate a grid arrangement with random colours that fits the canva
   for (let x = 0; x + squareSize < width; x += squareSize) { 
     for (let y = 0; y + squareSize < height; y += squareSize) {
       stroke(0); 
       square(x, y, squareSize);
-      fill(random(255), random(255), 255);
+      fill(random(255), random(255), 255);  
     }
   }
 }
