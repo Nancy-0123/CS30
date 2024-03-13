@@ -6,8 +6,6 @@
 // - describe what you did to take this project "above and beyond"
 
 let rectWidth = 10; 
-let topHeight = 0;
-let topX = 0;
 let heightTime = 0; 
 
 function setup() {
@@ -20,6 +18,8 @@ function setup() {
 function generateTerrain(){
   //using a single loop, generate a bunch of side to side
   //rectangles of varying height
+  let topHeight = 0;
+  let topX = 0;
   fill(0);
   for (let x = 0; x < width; x += rectWidth){
     rectHeight = noise(heightTime);
@@ -27,14 +27,15 @@ function generateTerrain(){
     rect(x, height, rectWidth, rectHeight);
     heightTime += 0.01;
 
-    while (rectHeight > topHeight){
-      topHeight = rectHeight;
+    if (topHeight < rectHeight*0.5){
+      topHeight = rectHeight*0.5;
       topX = x;
     }
   }
+  drawFlag(topX, height-topHeight);
 }
 function draw() {
-  drawFlag(topX, topHeight);
+
 }
 
 function keyPressed() {
