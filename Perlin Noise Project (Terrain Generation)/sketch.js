@@ -1,13 +1,13 @@
 // Perlin Noise Project (Terrain Generation)
 // Nancy Yang
 // Date
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
+// Generating terrains 
+
 
 let rectWidth = 5; 
 let heightTime = 0;
-let averageHeight=0;  
+let averageHeight = 0;
+let heightShift = 1;  
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -16,9 +16,8 @@ function setup() {
   generateTerrain(); 
 }
 
+
 function generateTerrain(){
-  //using a single loop, generate a bunch of side to side
-  //rectangles of varying height
   let topHeight = 0;
   let topX = 0;
   let noiseShift = 0.01;
@@ -32,46 +31,51 @@ function generateTerrain(){
     rect(x, height, rectWidth+x, height - rectHeight);
     heightTime += noiseShift;
     
-
+    // Find the highest peak
     if (topHeight < rectHeight){
       topHeight = rectHeight;
       topX = x;
     }
-
+    // Determine the average height
     totalHeight += rectHeight;
     rectCount += 1; 
   }
   averageHeight = totalHeight/ rectCount
   drawAverage(); 
-
   drawFlag(topX, height-topHeight);
 }
-function draw() {
 
+function draw() {
+  background(250);
+  heightTime = 0 + heightShift;
+  heightShift += 0.01;
+  generateTerrain();
 }
 
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
-    if (rectWidth > 3){
+    if (rectWidth > 1){
     rectWidth -= 1;
     clear();
     generateTerrain();
     }
   }
   else if (keyCode === RIGHT_ARROW) {
-    rectWidth += 3;
+    rectWidth += 1;
     clear();
     generateTerrain();
   }
 }
 
+// Draw a flag
 function drawFlag(x,y){
   fill(0)
   line(x, y, x, y-30);
   triangle(x, y-20, x+15, y-20, x, y-40);
 }
 
+// Draw the average line
 function drawAverage(){
-  fill(255, 180, 0);
+  fill(250, 200, 0);
   rect(0, height-averageHeight, width, height-averageHeight + 5);
 }
