@@ -1,8 +1,7 @@
 // Perlin Noise Project (Terrain Generation)
 // Nancy Yang
-// Date
-// Generating terrains 
-
+// March 22, 2024
+// Generate terrains by using noise function, find the highest peak, and draw the average line
 
 let rectWidth = 5; 
 let heightTime = 0;
@@ -16,20 +15,19 @@ function setup() {
   generateTerrain(); 
 }
 
-
 function generateTerrain(){
   let topHeight = 0;
   let topX = 0;
-  let noiseShift = 0.01;
   let totalHeight = 0; 
   let rectCount = 0;
 
+  // Generate a smoother terrain by using noise function
   fill(0);
   for (let x = 0; x < width; x += rectWidth){
     rectHeight = noise(heightTime);
     rectHeight = map(rectHeight, 0, 1, 0, height);
     rect(x, height, rectWidth+x, height - rectHeight);
-    heightTime += noiseShift;
+    heightTime += 0.01;
     
     // Find the highest peak
     if (topHeight < rectHeight){
@@ -45,13 +43,15 @@ function generateTerrain(){
   drawFlag(topX, height-topHeight);
 }
 
+// Makes the screen scroll
 function draw() {
   background(250);
-  heightTime = 0 + heightShift;
+  heightTime = 0 - heightShift;
   heightShift += 0.01;
   generateTerrain();
 }
 
+// Press right arrow to increase the width of the rectangles and left arrow to decrease the width
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
     if (rectWidth > 1){
@@ -76,6 +76,6 @@ function drawFlag(x,y){
 
 // Draw the average line
 function drawAverage(){
-  fill(250, 200, 0);
+  fill(255, 0, 0);
   rect(0, height-averageHeight, width, height-averageHeight + 5);
 }
