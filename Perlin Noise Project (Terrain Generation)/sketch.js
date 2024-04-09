@@ -8,6 +8,7 @@ let heightTime = 0;
 let averageHeight = 0;
 let heightShift = 1;  
 
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   rectMode(CORNERS);
@@ -38,16 +39,16 @@ function generateTerrain(){
     totalHeight += rectHeight;
     rectCount += 1; 
   }
-  averageHeight = totalHeight/ rectCount
+  averageHeight = totalHeight/ rectCount;
   drawAverage(); 
   drawFlag(topX, height-topHeight);
 }
 
-// Makes the screen scroll
+// Makes the screen scroll from left to right
 function draw() {
   background(250);
   heightTime = 0 - heightShift;
-  heightShift += 0.01;
+  heightShift += 0.03;
   generateTerrain();
 }
 
@@ -69,7 +70,7 @@ function keyPressed() {
 
 // Draw a flag
 function drawFlag(x,y){
-  fill(0)
+  fill(0);
   line(x, y, x, y-30);
   triangle(x, y-20, x+15, y-20, x, y-40);
 }

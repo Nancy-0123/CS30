@@ -5,6 +5,7 @@
 
 let squareSize = 20; 
 
+//Set up the canva
 function setup() {  
   document.addEventListener("contextmenu", event => event.preventDefault());
   createCanvas(windowWidth, windowHeight);
