@@ -2,13 +2,14 @@
 // Nancy Yang
 // Date
 //
+
 let vehicles = [];
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   for (let i = 0; i < 20; i++){
-    const y = random(height/2 - 20, height/6 + 12);
-    vehicles.push(new DrawVehicle(random(0, width), y, random[0,1], ));
+    const y = random(height);
+    vehicles.push(new DrawVehicle(random(0, width), y, random(0,1), random(0,1), random(1,15)));
   }
 }
 
@@ -43,20 +44,27 @@ class Vehicle {
       rect(this.x - 15, this.y, 10, 20);
       rect(this.x + 15, this.y, 10, 20);
       fill(this.c);
-      rect(this.x, this.y, 50, 15);
+      rect(this.x-8, this.y-0.5, 38, 15);
     }
+
     else if (this.carType === 1) {
-      rect(this.x, this.y, 50, 20);
-      rect(this.x - 15, this.y, 1, 20);
+      if (this.direction === 0){
+        rect(this.x, this.y, 40, 20);
+        rect(this.x - 10, this.y, 1, 20);
+      }
+      else{ 
+        rect(this.x, this.y, 40, 20);
+        rect(this.x + 10, this.y, 1, 20);
+      }
     }
   }
 
-  move() {
-    this.x += this.xSpeed;
-  }
-
-  speedUp() {
-
+  move(){
+    if (this.direction === 0) {
+      this.x += this.xSpeed;
+    }
+    else if (this.direction === 1){
+      this.x -= this.xSpeed;
+    }
   }
 }
-
