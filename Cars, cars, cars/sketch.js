@@ -1,70 +1,176 @@
-// Cars Cars Cars
-// Nancy Yang
-// Date
-//
-
-let vehicles = [];
+let eastbound = [];
+let westbound = [];
+let trafficLight;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  for (let i = 0; i < 20; i++){
-    const y = random(height);
-    vehicles.push(new DrawVehicle(random(0, width), y, random(0,1), random(0,1), random(1,15)));
+  for (let i = 0; i < 20; i++) {
+    const y = random(height / 4.3, height / 2.2);
+    eastbound.push(new Vehicle(random(0, width), y, 1));
   }
+
+  for (let i = 0; i < 20; i++) {
+    const y = random(height / 1.9, height / 1.4);
+    westbound.push(new Vehicle(random(0, width), y, 0));
+  }
+  trafficLight = new TrafficLight();
 }
 
 function draw() {
   background(220);
   drawRoad();
+  for (let i = 0; i < eastbound.length; i++) {
+    eastbound[i].action();
+  }
+  for (let i = 0; i < westbound.length; i++) {
+    westbound[i].action();
+  }
+  trafficLight.
 }
 
-function drawRoad(){
+function mouseClicked() {
+  if(mouseButton = LEFT){
+    eastbound.push(new Vehicle(mouseX, mouseY, 1));
+  }
+  if (mouseButton = LEFT && keyCode === SHIFT){
+    westbound.push(new Vehicle(mouseX, mouseY, 0));
+  }
+}
+
+function drawRoad() {
   fill(0);
-  rect(0, height/5, width, height/2);
+  rect(0, height / 5 + 20, width, height / 2+ 20);
   fill(255, 204, 0);
-  for(let i = 0; i < width; i += 60) {
-    rect(i, height/2.2, 40, 5);
+  for (let i = 0; i < width; i += 60) {
+    rect(i, height / 2, 40, 4);
   }
 }
 
 class Vehicle {
-  constructor(x, y, carType, direction, xSpeed){
+  constructor(x, y, dir) {
     this.x = x;
     this.y = y;
-    this.carType = carType;
-    this.c = (random(255), random(255), random(255));
-    this.direction = direction;
-    this.xSpeed = xSpeed;
+    this.carType = int(random(2));
+    this.c = color(random(255), random(255), random(255));
+    this.dir = dir;
+    if (this.dir === 1){
+       this.xSpeed = random(1, 15);
+    }
+    else {
+      this.xSpeed = random(-15, -1);
+    }
+  }
+
+  action() {
+    this.move();
+    this.display();
+    const chance = random(0, 100);
+    if (chance === 1){
+      this.speedUp();
+    }
+    //this.speedDown();
+    //this.changeColor();
+  }
+
+  display() {
+    if (this.carType === 0) {
+      this.drawCar();
+    } else if (this.carType === 1) {
+      this.drawTruck();
+    }
+  }
+
+  drawCar() {
+    fill(255);
+    rect(this.x - 15, this.y, 10, 20);
+    rect(this.x + 15, this.y, 10, 20);
+    fill(this.c);
+    rect(this.x - 20, this.y + 2, 50, 15);
+  }
+
+  drawTruck() {
+    if (this.dir === 0) {
+      fill(this.c);
+      rect(this.x, this.y, 40, 25);
+      rect(this.x + 10, this.y, 1, 25);
+    } 
+    else {
+      fill(this.c);
+      rect(this.x, this.y, 30, 25);
+      rect(this.x + 30, this.y, 10, 25);
+    }
+  }
+
+  move() {
+    this.x += this.xSpeed;
+    if (this.dir === 0) {
+      if (this.x < 0) {
+        this.x = width;
+      }
+    } else if (this.dir === 1) {
+      if (this.x > width) {
+        this.x = 0;
+      }
+    }
   }
   
-  display(){
-    rectMode(CENTER);
-    if (this.carType === 0){
-      fill(0);
-      rect(this.x - 15, this.y, 10, 20);
-      rect(this.x + 15, this.y, 10, 20);
-      fill(this.c);
-      rect(this.x-8, this.y-0.5, 38, 15);
+  speedUp(){
+    if (this.dir === 0){
+      if (this.xSpeed > -15){
+        this.xSpeed -= 0.5;
+      }
     }
-
-    else if (this.carType === 1) {
-      if (this.direction === 0){
-        rect(this.x, this.y, 40, 20);
-        rect(this.x - 10, this.y, 1, 20);
-      }
-      else{ 
-        rect(this.x, this.y, 40, 20);
-        rect(this.x + 10, this.y, 1, 20);
-      }
+    else if (this.dir === 1){
+      if (this.xSpeed < 15)
+      this.xSpeed += 0.5;
     }
   }
-
-  move(){
-    if (this.direction === 0) {
-      this.x += this.xSpeed;
+  
+  speedDown(){
+    if (this.dir === 0){
+      if (this.xSpeed < 0 && this.xSpeed > -15){
+        this.xSpeed += 0.5;
+      }
     }
-    else if (this.direction === 1){
-      this.x -= this.xSpeed;
+    else if (this.dir === 1){
+      if (this.xSpeed > 0 && this.xSpeed < 15){
+        this.xSpeed -= 0.5;
+      }
+    } 
+  }
+  
+  changeColor(){
+    this.c = color(random(255), random(255), random(255));
+  }
+}
+
+class TrafficLight{
+  constructor(){
+    this.type = 0;
+    this.frame = 0;
+  }
+
+  drawTrafficLight(){
+    if (this.type === 0) {
+      fill(0, 255, 0);
+    }
+    else {
+      fill(255, 0, 0);
+    }
+    circle(150, 180, 30);
+  }
+
+  switchLight(){
+    this.drawTrafficLight();
+    this.frame ++;
+    if (this.type === 0){
+      if (this.frame > 120){
+        this.type = 1;
+      }
+      
     }
   }
 }
+
+
+
