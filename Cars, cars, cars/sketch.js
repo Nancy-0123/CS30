@@ -40,12 +40,14 @@ function draw() {
 //left click: add an eastbound car
 //shift + left click: add a westbound car
 function mouseClicked() {
-  if(mouseButton === LEFT){
-    eastbound.push(new Vehicle(mouseX, mouseY, 1));
+  if (mouseButton === LEFT && keyCode === SHIFT && keyIsPressed) {
+    const y = random(height / 1.9, height / 1.4);
+    westbound.push(new Vehicle(random(0, width), y, 0));
   }
-  if (mouseButton === LEFT && keyCode === SHIFT){
-    westbound.push(new Vehicle(mouseX, mouseY, 0));
-  }
+  else if (mouseButton === LEFT) {
+    const y = random(height / 4.3, height / 2.2);
+    eastbound.push(new Vehicle(random(0, width), y, 1));
+  } 
 }
 
 //Draw the road
@@ -84,9 +86,11 @@ class Vehicle {
     if (chance === 1){
       this.speedUp();
     }
+    chance = int(random(0, 100));
     if (chance === 1){
       this.speedDown();
     }
+    chance = int(random(0, 100));
     if (chance === 1){
       this.changeColor();
     }
@@ -139,28 +143,28 @@ class Vehicle {
   }
  
   //Let the cars speedup
-  speedUp(){
-    if (this.dir === 0){
-      if (this.xSpeed > -15){
-        this.xSpeed -= 0.5;
+  speedUp() {
+    if (this.dir === 0) {
+      if (this.xSpeed > -15) {
+        this.xSpeed -= 1;
+      }
+    } 
+    else if (this.dir === 1) {
+      if (this.xSpeed < 15) {
+        this.xSpeed += 1;
       }
     }
-    else if (this.dir === 1){
-      if (this.xSpeed < 15)
-      this.xSpeed += 0.5;
-    }
-  }
-  
-  //
-  speedDown(){
-    if (this.dir === 0){
-      if (this.xSpeed < 0 && this.xSpeed > -15){
-        this.xSpeed += 0.5;
+}
+
+  speedDown() {
+    if (this.dir === 0) {
+      if (this.xSpeed < -1 && this.xSpeed > -15) {
+        this.xSpeed += 1;
       }
-    }
-    else if (this.dir === 1){
-      if (this.xSpeed > 0 && this.xSpeed < 15){
-        this.xSpeed -= 0.5;
+    } 
+    else if (this.dir === 1) {
+      if (this.xSpeed > 1 && this.xSpeed < 15) {
+        this.xSpeed -= 1;
       }
     }
   }
@@ -183,23 +187,23 @@ class TrafficLight{
     else {
       fill(255, 0, 0);
     }
-    circle(150, 150, 30);
+    circle(width/2, 150, 30);
   }
 
   switchLight(){
     this.drawTrafficLight();
     this.frame ++;
     if (this.type === 0) {
-        if (this.frame > 120) {
-            this.type = 1; 
-            this.frame = 0; 
-        }
+      if (this.frame > 120) {
+        this.type = 1; 
+        this.frame = 0; 
+      }
     } 
     else if (this.type === 1) {
-        if (this.frame > 120) {
-            this.type = 0; 
-            this.frame = 0; 
-        }
+      if (this.frame > 120) {
+        this.type = 0; 
+        this.frame = 0; 
+      }
     }
   }
 }
