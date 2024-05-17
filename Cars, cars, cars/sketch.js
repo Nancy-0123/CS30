@@ -1,13 +1,13 @@
-//Cars, cars, cars
+// Cars, cars, cars
 // Nancy Yang
-// April 26, 2024
-//
+// May 10, 2024
+// Traffic Simulation
 
 let eastbound = [];
 let westbound = [];
 let trafficLight;
 
-//
+// Add 20 cars in each direction 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   for (let i = 0; i < 20; i++) {
@@ -15,14 +15,12 @@ function setup() {
     eastbound.push(new Vehicle(random(0, width), y, 1));
   }
 
-
   for (let i = 0; i < 20; i++) {
     const y = random(height / 1.9, height / 1.4);
     westbound.push(new Vehicle(random(0, width), y, 0));
   }
   trafficLight = new TrafficLight();
 }
-
 
 function draw() {
   background(220);
@@ -33,7 +31,7 @@ function draw() {
   for (let i = 0; i < westbound.length; i++) {
     westbound[i].action();
   }
-  trafficLight.switchLight();
+  trafficLight.display();;
 }
 
 //Adding more cars
@@ -47,7 +45,7 @@ function mouseClicked() {
   else if (mouseButton === LEFT) {
     const y = random(height / 4.3, height / 2.2);
     eastbound.push(new Vehicle(random(0, width), y, 1));
-  } 
+  }
 }
 
 //Draw the road
@@ -60,7 +58,6 @@ function drawRoad() {
   }
 }
 
-
 class Vehicle {
   constructor(x, y, dir) {
     this.x = x;
@@ -69,17 +66,17 @@ class Vehicle {
     this.c = color(random(255), random(255), random(255));
     this.dir = dir;
     if (this.dir === 1){
-       this.xSpeed = random(1, 15);
+      this.xSpeed = random(1, 15);
     }
     else {
       this.xSpeed = random(-15, -1);
     }
   }
 
-
+  //1% chance for speeding up, speeding down, and changing colours
   action() {
     if (trafficLight.type ===0){
-       this.move();
+      this.move();
     }
     this.display();
     let chance = int(random(0, 100));
@@ -142,13 +139,13 @@ class Vehicle {
     }
   }
  
-  //Let the cars speedup
+  //Let the cars speed up
   speedUp() {
     if (this.dir === 0) {
       if (this.xSpeed > -15) {
         this.xSpeed -= 1;
       }
-    } 
+    }
     else if (this.dir === 1) {
       if (this.xSpeed < 15) {
         this.xSpeed += 1;
@@ -156,19 +153,21 @@ class Vehicle {
     }
 }
 
+  //Let the cars speed down
   speedDown() {
     if (this.dir === 0) {
-      if (this.xSpeed < -1 && this.xSpeed > -15) {
+      if (this.xSpeed < -1) {
         this.xSpeed += 1;
       }
-    } 
+    }
     else if (this.dir === 1) {
-      if (this.xSpeed > 1 && this.xSpeed < 15) {
+      if (this.xSpeed > 1) {
         this.xSpeed -= 1;
       }
     }
   }
  
+  //Change the cars' colors
   changeColor(){
     this.c = color(random(255), random(255), random(255));
   }
@@ -180,6 +179,7 @@ class TrafficLight{
     this.frame = 0;
   }
 
+  //Draw the traffic light
   drawTrafficLight(){
     if (this.type === 0) {
       fill(0, 255, 0);
@@ -189,23 +189,29 @@ class TrafficLight{
     }
     circle(width/2, 150, 30);
   }
-
-  switchLight(){
+ 
+  //Turn the light back to green after 120 frames
+  display() {
     this.drawTrafficLight();
-    this.frame ++;
-    if (this.type === 0) {
-      if (this.frame > 120) {
-        this.type = 1; 
-        this.frame = 0; 
+    if (this.type === 1) {
+      if (this.frame >= 120) {
+        this.type = 0;
+        this.frame = 0;
       }
-    } 
-    else if (this.type === 1) {
-      if (this.frame > 120) {
-        this.type = 0; 
-        this.frame = 0; 
+      else {
+        this.frame++;
       }
     }
   }
+ 
+  switchLight() {
+    this.type = 1;
+  }
 }
 
-
+//switch light if the user presses the spacebar
+function keyPressed(){
+  if (keyCode === 32) {
+    trafficLight.switchLight();
+  }
+}
