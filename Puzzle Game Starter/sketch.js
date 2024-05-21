@@ -13,7 +13,7 @@ let gridData = [
   [0, 255, 0, 0, 0],
   [255, 255, 255, 0, 0]
 ];
-let type = 0;  // Initialize the flipping pattern to be cross
+let type = 0;  // Initialize the flipping pattern to be cross(0)
 let overlay;
 
 function setup() {
@@ -123,21 +123,27 @@ function RandomizeStartingBoard() {
 
 //Draw colored overlay to indicate which rectangles will be impacted on a click
 function drawOverlay() {
-  if (type === 1) {  // square
+  if (keyIsPressed && keyCode === SHIFT) {
+    // Cheater cheater overlay
+    overlay.fill(50, 179, 80, 100);  // Use a different color for cheater cheater
+    overlay.rect(currentCol * rectWidth, currentRow * rectHeight, rectWidth, rectHeight);
+  }
+  else if (type === 1) {  // Square pattern overlay
     overlay.fill(50, 170, 80, 100);
     overlay.rect(currentCol * rectWidth, currentRow * rectHeight, rectWidth, rectHeight);
     overlay.rect(currentCol * rectWidth, (currentRow + 1) * rectHeight, rectWidth, rectHeight);
     overlay.rect((currentCol + 1) * rectWidth, currentRow * rectHeight, rectWidth, rectHeight);
     overlay.rect((currentCol + 1) * rectWidth, (currentRow + 1) * rectHeight, rectWidth, rectHeight);
   } 
-  else {  // cross
-    overlay.fill(50, 168, 82, 100);
+  else if (type === 0) {  // Cross pattern overlay
+    overlay.fill(50, 170, 80, 100);
     overlay.rect(currentCol * rectWidth, currentRow * rectHeight, rectWidth, rectHeight);
     overlay.rect(currentCol * rectWidth, (currentRow - 1) * rectHeight, rectWidth, rectHeight);
     overlay.rect((currentCol - 1) * rectWidth, currentRow * rectHeight, rectWidth, rectHeight);
     overlay.rect(currentCol * rectWidth, (currentRow + 1) * rectHeight, rectWidth, rectHeight);
     overlay.rect((currentCol + 1) * rectWidth, currentRow * rectHeight, rectWidth, rectHeight);
   }
+  
   image(overlay, 0, 0);
-  overlay.clear();
-}
+  overlay.clear();  
+} 
